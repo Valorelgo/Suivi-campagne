@@ -269,3 +269,30 @@ input, select {
 @media (max-width: 900px) {
   .map-sidebar { width: 140px; }
 }
+
+/* Carte du viewer en pleine largeur : sort du conteneur centré à 1200px */
+.map-card-full {
+  max-width: none;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+
+/* En plein écran (Fullscreen API), la carte doit occuper tout l'écran */
+.map-card-full:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  margin: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0;
+  overflow-y: auto;
+}
+.map-card-full:fullscreen > div[style*="height:85vh"] {
+  height: 92vh !important;
+}

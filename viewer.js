@@ -552,4 +552,16 @@ async function loadCampaignData() {
   }
 }
 
+function toggleMapFullscreen() {
+  let el = document.getElementById('map-fullscreen-target');
+  if (!document.fullscreenElement) {
+    el.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen();
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  if (campaignMap) setTimeout(() => campaignMap.invalidateSize(), 100);
+});
+
 window.onload = loadCampaignData;
