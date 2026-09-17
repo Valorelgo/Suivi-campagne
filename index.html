@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hive Mortis — Suivi de Campagne</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Bandeau supérieur : consultation seule, aucune action -->
+  <header id="top-bar">
+    <div class="header-info">
+      <h1 id="campaign-name-display">Hive Mortis — Suivi de Campagne</h1>
+      <span id="current-phase-display">Phase : —</span>
+    </div>
+  </header>
+
+  <main id="app-container">
+
+    <!-- Contrôle de Phase (affichage seul) -->
+    <div class="card phase-card">
+      <div class="phase-header">
+        <h2 id="phase-title">Chargement…</h2>
+      </div>
+      <p id="phase-desc" class="phase-desc"></p>
+    </div>
+
+    <!-- Défis du Cycle en cours (lecture seule) -->
+    <div class="card">
+      <h3>📢 Défis du Cycle</h3>
+      <div id="challenges-container"></div>
+    </div>
+
+    <!-- Classement des Triomphes -->
+    <div class="card triumphs-card">
+      <h3>🏆 En Tête des Triomphes</h3>
+      <div class="triumphs-grid" id="triumphs-container"></div>
+    </div>
+
+    <!-- État des Gangs -->
+    <div class="card">
+      <h3>📊 État des Gangs</h3>
+      <div id="gangs-status-container" class="gangs-grid"></div>
+    </div>
+
+    <!-- Historique des Parties (lecture seule) -->
+    <div class="card">
+      <h3>📜 Historique des Affrontements</h3>
+      <div id="matches-history-list" class="history-list"></div>
+    </div>
+
+    <!-- Carte Interactive (halo au survol, infos au clic — rien n'est modifiable) -->
+    <div class="card">
+      <h3>🗺️ Carte de la Campagne</h3>
+      <div style="display:flex; gap:10px; height:75vh; width:100%;">
+        <div id="map-players-sidebar" class="map-sidebar"></div>
+        <div style="position:relative; flex:1; min-width:0; border-radius:6px; overflow:hidden; background:#050505;">
+          <div id="campaign-map-container" style="width:100%; height:100%;"></div>
+          <div id="zone-info-panel" class="zone-info-panel hidden"></div>
+        </div>
+        <div id="map-territories-sidebar" class="map-sidebar"></div>
+      </div>
+      <small style="color:#aaa; display:block; margin-top:8px;">Survolez un secteur (ou son nom dans les listes) pour le repérer, cliquez pour voir ses détails.</small>
+    </div>
+
+  </main>
+
+  <!-- Modale d'information (territoire / secteur) — lecture seule, pas d'action -->
+  <div id="modal-overlay" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="modal-title">Titre Modale</h3>
+      <div id="modal-body"></div>
+      <div class="modal-actions">
+        <button class="btn btn-danger" onclick="closeModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="viewer.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+</html>

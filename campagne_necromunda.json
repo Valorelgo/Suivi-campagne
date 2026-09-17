@@ -1,0 +1,308 @@
+{
+  "currentPhaseIndex": 0,
+  "phases": [
+    {
+      "id": 1,
+      "name": "Phase d'Occupation - Cycle 1",
+      "type": "occupation"
+    },
+    {
+      "id": 2,
+      "name": "Phase d'Occupation - Cycle 2",
+      "type": "occupation"
+    },
+    {
+      "id": 3,
+      "name": "Phase d'Occupation - Cycle 3",
+      "type": "occupation"
+    },
+    {
+      "id": 4,
+      "name": "Phase de Pause",
+      "type": "pause"
+    },
+    {
+      "id": 5,
+      "name": "Phase de Conquête - Cycle 1",
+      "type": "conquest"
+    },
+    {
+      "id": 6,
+      "name": "Phase de Conquête - Cycle 2",
+      "type": "conquest"
+    },
+    {
+      "id": 7,
+      "name": "Phase de Conquête - Cycle 3",
+      "type": "conquest"
+    }
+  ],
+  "players": [
+    {
+      "id": "player_1",
+      "name": "Greg",
+      "gangName": "Iron gene",
+      "gangType": "Genestealer",
+      "color": "Bleu",
+      "credits": 1030,
+      "gangRating": 0,
+      "baseReputation": 2,
+      "battlesPlayed": 1,
+      "enemiesOOA": 2,
+      "ooaInCurrentCycle": 2
+    },
+    {
+      "id": "player_2",
+      "name": "Renaud",
+      "gangName": "Sombres kekette",
+      "gangType": "Delaque",
+      "color": "Jaune",
+      "credits": 1030,
+      "gangRating": 0,
+      "baseReputation": 1,
+      "battlesPlayed": 1,
+      "enemiesOOA": 2,
+      "ooaInCurrentCycle": 2
+    },
+    {
+      "id": "player_3",
+      "name": "Ouriel",
+      "gangName": "Les cramés",
+      "gangType": "Cawdor",
+      "color": "Rouge",
+      "credits": 1070,
+      "gangRating": 0,
+      "baseReputation": 2,
+      "battlesPlayed": 2,
+      "enemiesOOA": 5,
+      "ooaInCurrentCycle": 5
+    },
+    {
+      "id": "player_4",
+      "name": "Gauthier",
+      "gangName": "Les meufs",
+      "gangType": "Escher",
+      "color": "Violet",
+      "credits": 1000,
+      "gangRating": 0,
+      "baseReputation": 1,
+      "battlesPlayed": 0,
+      "enemiesOOA": 0,
+      "ooaInCurrentCycle": 0
+    }
+  ],
+  "territories": [
+    {
+      "id": 2,
+      "name": "Settlement",
+      "type": "custom_or_15",
+      "ownerId": "player_1"
+    },
+    {
+      "id": 5,
+      "name": "Settlement",
+      "type": "custom_or_15",
+      "ownerId": "player_2"
+    },
+    {
+      "id": 16,
+      "name": "Settlement",
+      "type": "custom_or_15",
+      "ownerId": "player_3"
+    },
+    {
+      "id": 18,
+      "name": "Settlement",
+      "type": "custom_or_15",
+      "ownerId": "player_4"
+    },
+    {
+      "id": 8,
+      "name": "Old ruins",
+      "type": "fixed_20",
+      "ownerId": "player_1"
+    },
+    {
+      "id": 11,
+      "name": "Bounty den",
+      "type": "fixed_25",
+      "ownerId": "player_2"
+    },
+    {
+      "id": 6,
+      "name": "Generatorium",
+      "type": "fixed_15_rep",
+      "ownerId": "player_3"
+    },
+    {
+      "id": 13,
+      "name": "Bone shrine",
+      "type": "fixed_25",
+      "ownerId": "player_4"
+    },
+    {
+      "id": 1,
+      "name": "Mine workings",
+      "type": "choice_20_30",
+      "ownerId": "player_1"
+    },
+    {
+      "id": 3,
+      "name": "Fence hangout",
+      "type": "choice_15_50",
+      "ownerId": "player_3"
+    },
+    {
+      "id": 4,
+      "name": "Gambling den",
+      "type": "fixed_15_rep",
+      "ownerId": null
+    },
+    {
+      "id": 7,
+      "name": "Synth still",
+      "type": "fixed_20",
+      "ownerId": null
+    },
+    {
+      "id": 9,
+      "name": "Bullet den",
+      "type": "choice_15_100",
+      "ownerId": null
+    },
+    {
+      "id": 10,
+      "name": "Tech bazaar",
+      "type": "fixed_15",
+      "ownerId": null
+    },
+    {
+      "id": 12,
+      "name": "Tunnels",
+      "type": "fixed_20",
+      "ownerId": null
+    },
+    {
+      "id": 14,
+      "name": "Mess Shack",
+      "type": "choice_15_45",
+      "ownerId": null
+    },
+    {
+      "id": 15,
+      "name": "Corpse farm",
+      "type": "corpse_farm",
+      "ownerId": null
+    },
+    {
+      "id": 17,
+      "name": "Collapsed dome",
+      "type": "fixed_20",
+      "ownerId": null
+    },
+    {
+      "id": 19,
+      "name": "Drinking hole",
+      "type": "choice_15_30",
+      "ownerId": null
+    },
+    {
+      "id": 20,
+      "name": "Fighting pit",
+      "type": "fixed_25",
+      "ownerId": null
+    }
+  ],
+  "matchesHistory": [
+    {
+      "date": "17/09/2026",
+      "phaseName": "Phase d'Occupation - Cycle 1",
+      "p1Id": "player_3",
+      "p1Name": "Les cramés",
+      "p1Creds": 50,
+      "p1Rep": 1,
+      "p1OOA": 4,
+      "p2Id": "player_2",
+      "p2Name": "Sombres kekette",
+      "p2Creds": 30,
+      "p2Rep": 0,
+      "p2OOA": 2,
+      "territoryName": "Fence hangout",
+      "winnerName": "Les cramés"
+    },
+    {
+      "date": "17/09/2026",
+      "phaseName": "Phase d'Occupation - Cycle 1",
+      "p1Id": "player_1",
+      "p1Name": "Iron gene",
+      "p1Creds": 30,
+      "p1Rep": 1,
+      "p1OOA": 2,
+      "p2Id": "player_3",
+      "p2Name": "Les cramés",
+      "p2Creds": 20,
+      "p2Rep": 0,
+      "p2OOA": 1,
+      "territoryName": "Mine workings",
+      "winnerName": "Iron gene"
+    }
+  ],
+  "cycleChallenges": {
+    "1": {
+      "priorityOrder": [
+        "player_1",
+        "player_3",
+        "player_2",
+        "player_4"
+      ],
+      "challenges": [
+        {
+          "id": "1_0",
+          "attackerId": "player_1",
+          "defenderId": "player_3",
+          "territoryId": 1,
+          "mandatory": true,
+          "resolved": true,
+          "resolutionType": "match",
+          "result": {
+            "winnerId": "player_1"
+          }
+        },
+        {
+          "id": "1_1",
+          "attackerId": "player_3",
+          "defenderId": "player_2",
+          "territoryId": 3,
+          "mandatory": true,
+          "resolved": true,
+          "resolutionType": "match",
+          "result": {
+            "winnerId": "player_3"
+          }
+        },
+        {
+          "id": "1_2",
+          "attackerId": "player_2",
+          "defenderId": "player_4",
+          "territoryId": 4,
+          "mandatory": true,
+          "resolved": false,
+          "resolutionType": null,
+          "result": null
+        },
+        {
+          "id": "1_3",
+          "attackerId": "player_4",
+          "defenderId": "player_1",
+          "territoryId": 9,
+          "mandatory": true,
+          "resolved": false,
+          "resolutionType": null,
+          "result": null
+        }
+      ]
+    }
+  },
+  "id": "camp_1789645180981",
+  "name": "Test campagne"
+}
