@@ -61,7 +61,7 @@ function getTerritoryTypeDescription(type) {
     case "choice_15_30": return "Choix entre 15 et 30 crédits";
     case "choice_15_50": return "Choix entre 15 et 50 crédits";
     case "choice_20_30": return "Choix entre 20 et 30 crédits";
-    case "corpse_farm": return "0 cr de base (+10 cr par ennemi mis hors de combat)";
+    case "corpse_farm": return "25 crédits fixes, + 10 crédits par ennemi mis hors de combat (compté automatiquement lors des matchs)";
     case "fixed_25": return "25 crédits fixes";
     case "fixed_20": return "20 crédits fixes";
     case "fixed_15": return "15 crédits fixes";
