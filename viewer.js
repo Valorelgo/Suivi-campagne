@@ -94,7 +94,7 @@ function getPlayerTerritories(playerId) {
 }
 
 
-const TERRITORY_MARKERS = {
+const TERRITORY_MARKERS_4P = {
   1:  [809, 417],   // Settlement
   2:  [867, 690],   // Bullet den
   3:  [272, 704],   // Rogue doc shop
@@ -118,9 +118,7 @@ const TERRITORY_MARKERS = {
 };
 
 // Contours réels de chaque zone (halo au survol sur la carte), même repère [Y, X]
-
-
-const TERRITORY_POLYGONS = {
+const TERRITORY_POLYGONS_4P = {
   1: [[770.6,593.7], [943.6,494.7], [885.9,337.0], [785.4,196.0], [671.5,353.0]],
   2: [[950.6,754.9], [952.7,716.5], [940.1,720.7], [939.4,712.3], [945.7,706.0], [975.2,705.3], [979.5,697.0], [974.5,687.9], [950.6,685.8], [950.6,590.9], [940.8,509.3], [777.7,602.1], [781.2,658.6], [777.0,699.8], [819.8,796.7]],
   3: [[340.3,838.6], [397.3,768.1], [357.2,715.8], [354.4,617.4], [199.0,572.8], [191.3,793.3], [307.3,814.2]],
@@ -143,188 +141,85 @@ const TERRITORY_POLYGONS = {
   20: [[425.4,1467.9], [269.3,1607.4], [296.7,1659.8], [329.8,1705.8], [365.6,1744.2], [405.7,1775.6], [469.7,1564.2]],
 };
 
+// ---- Carte à 5 joueurs (25 zones) ----
+const TERRITORY_MARKERS_5P = {
+  1: [945.9, 960.9],
+  2: [927.9, 733.0],
+  3: [927.9, 1182.6],
+  4: [867.3, 508.7],
+  5: [869.5, 1403.8],
+  6: [781.2, 810.0],
+  7: [779.2, 1113.2],
+  8: [748.4, 1591.1],
+  9: [748.1, 317.8],
+  10: [669.4, 583.2],
+  11: [667.2, 1335.1],
+  12: [584.8, 958.5],
+  13: [587.3, 235.6],
+  14: [585.2, 1676.2],
+  15: [504.5, 575.5],
+  16: [505.4, 1340.9],
+  17: [430.7, 288.6],
+  18: [428.1, 1624.9],
+  19: [389.8, 800.6],
+  20: [390.7, 1118.0],
+  21: [310.6, 453.2],
+  22: [308.0, 1455.8],
+  23: [235.0, 680.6],
+  24: [233.9, 1230.6],
+  25: [208.2, 960.2],
+};
 
-function renderTriumphs() {
-  let container = document.getElementById('triumphs-container');
-  if (campaignData.players.length === 0) return;
+const TERRITORY_POLYGONS_5P = {
+  1: [[1006.2,834.4], [868.4,872.1], [874.0,937.0], [869.8,1047.9], [1006.9,1088.4], [1013.9,986.5], [1013.9,927.2]],
+  2: [[869.1,862.3], [1005.5,825.3], [998.4,718.6], [972.4,574.2], [965.4,574.9], [836.7,694.2], [855.7,768.1]],
+  3: [[868.4,1057.7], [867.0,1072.3], [874.0,1084.2], [864.1,1090.5], [843.0,1218.8], [958.4,1336.0], [964.0,1336.0], [995.6,1209.8], [1006.2,1097.4]],
+  4: [[831.8,682.3], [838.1,682.3], [966.1,563.7], [943.6,475.1], [870.5,310.5], [862.0,316.0], [772.0,520.5], [772.0,537.9], [814.9,614.7]],
+  5: [[838.1,1231.4], [777.7,1384.2], [866.2,1596.3], [873.3,1597.7], [929.5,1479.8], [960.5,1349.3], [844.5,1231.4]],
+  6: [[867.0,956.5], [861.3,858.1], [843.8,750.0], [838.1,748.6], [840.2,737.4], [811.4,628.6], [799.5,598.6], [793.1,597.9], [684.1,777.9], [683.4,787.0], [710.2,865.8], [722.8,955.8]],
+  7: [[866.2,963.5], [718.6,965.6], [711.6,1050.0], [679.2,1132.3], [788.2,1327.7], [794.5,1327.0], [836.0,1211.2], [834.6,1192.3], [840.2,1188.8], [854.3,1110.7], [844.5,1076.5], [862.7,1046.5]],
+  8: [[772.0,1389.8], [765.7,1390.5], [705.9,1467.2], [646.9,1495.8], [690.5,1789.5], [788.9,1714.2], [862.0,1610.9]],
+  9: [[701.0,124.9], [694.7,124.9], [651.8,414.4], [708.8,452.1], [761.5,512.8], [767.1,512.8], [859.2,296.5], [802.3,204.4]],
+  10: [[680.6,768.8], [790.3,581.9], [758.7,535.8], [760.1,523.3], [703.8,458.4], [653.9,424.9], [590.6,408.1], [587.1,706.0], [639.1,729.1], [675.0,768.8]],
+  11: [[677.1,1150.5], [670.1,1151.9], [639.8,1189.5], [588.5,1211.2], [587.8,1503.5], [659.5,1484.0], [701.0,1460.9], [732.7,1426.0], [785.4,1344.4]],
+  12: [[591.3,715.8], [544.2,729.1], [504.1,767.4], [471.8,847.7], [454.9,946.0], [470.4,1063.3], [502.0,1145.6], [537.2,1184.0], [580.1,1202.1], [634.9,1183.3], [668.7,1140.0], [705.2,1043.7], [714.4,955.8], [703.8,872.1], [672.9,779.3], [634.2,735.3]],
+  13: [[688.4,115.8], [589.9,84.4], [552.7,85.8], [490.8,99.8], [526.6,408.1], [589.2,397.7], [644.1,410.9]],
+  14: [[617.3,1823.7], [683.4,1797.2], [644.8,1498.6], [592.0,1511.2], [586.4,1520.2], [580.1,1513.3], [525.9,1503.5], [487.3,1808.4], [566.7,1827.9]],
+  15: [[583.6,408.8], [531.6,415.8], [488.7,439.5], [431.0,494.0], [384.6,561.6], [497.8,757.0], [542.8,720.7], [580.1,708.1]],
+  16: [[497.1,1159.5], [390.2,1355.6], [438.8,1430.2], [477.4,1472.8], [519.6,1493.0], [580.8,1504.9], [581.5,1211.2], [538.6,1194.4]],
+  17: [[425.4,483.5], [483.7,433.3], [519.6,415.1], [483.7,104.7], [447.9,117.2], [406.4,142.3], [316.4,234.4]],
+  18: [[422.6,1428.8], [315.7,1676.5], [400.1,1769.3], [435.9,1790.2], [479.5,1804.2], [518.2,1500.0], [475.3,1481.2], [429.6,1430.2]],
+  19: [[383.9,581.9], [377.6,583.3], [352.3,648.8], [319.2,755.6], [308.0,836.5], [301.6,956.5], [446.5,954.4], [465.5,842.1], [493.6,771.6]],
+  20: [[388.8,1336.7], [492.9,1143.5], [462.0,1060.5], [448.6,961.4], [302.3,963.5], [310.1,1091.9], [322.0,1174.9], [357.2,1278.8], [382.5,1336.7]],
+  21: [[348.7,635.6], [374.8,563.0], [420.5,491.2], [312.9,251.9], [306.6,251.9], [248.9,356.5], [195.5,482.8], [341.7,634.9]],
+  22: [[345.9,1271.2], [340.3,1271.2], [192.0,1422.6], [243.3,1553.0], [305.9,1659.8], [314.3,1654.9], [418.4,1419.8], [379.0,1357.7]],
+  23: [[195.5,494.7], [189.8,494.7], [159.6,624.4], [138.5,775.1], [300.9,835.1], [312.9,749.3], [342.4,646.7]],
+  24: [[196.9,1406.5], [339.6,1260.7], [314.3,1174.9], [302.3,1083.5], [137.1,1145.6], [162.4,1302.6], [189.8,1403.7]],
+  25: [[143.4,1135.1], [300.9,1073.0], [292.5,962.1], [299.5,844.9], [138.5,785.6], [126.6,990.7], [137.1,1129.5]],
+};
 
-  const categories = [
-    { icon: "👑", title: "Dominator", value: p => getPlayerTerritories(p.id).length, format: v => `${v} terr.` },
-    { icon: "💀", title: "Slaughterer", value: p => p.enemiesOOA, format: v => `${v} mis hors de combat` },
-    { icon: "💰", title: "Creditor", value: p => p.credits + p.gangRating, format: v => `${v} cr de richesse` },
-    { icon: "⚔️", title: "Warmonger", value: p => p.battlesPlayed, format: v => `${v} parties` },
-    { icon: "⚡", title: "Powerbroker", value: p => getPlayerReputation(p), format: v => `${v} rep` }
-  ];
+// Registre des cartes disponibles selon le nombre de joueurs. On choisit toujours la carte
+// dont le palier est le plus proche en dessous (ou égal) du nombre de joueurs ; en dessous du
+// plus petit palier connu (4), on utilise quand même celui-ci (pas de carte plus petite pour l'instant).
+const MAP_REGISTRY = {
+  4: { image: 'carte_underhive.jpg', markers: TERRITORY_MARKERS_4P, polygons: TERRITORY_POLYGONS_4P },
+  5: { image: 'carte_5_joueurs.jpg', markers: TERRITORY_MARKERS_5P, polygons: TERRITORY_POLYGONS_5P }
+  // 6: carte 30 zones à venir
+};
 
-  container.innerHTML = categories.map(cat => {
-    let ranked = [...campaignData.players].sort((a, b) => cat.value(b) - cat.value(a));
-    let leader = ranked[0];
-    let othersHTML = ranked.slice(1).map(p =>
-      `<div class="triumph-other-row">${p.gangName} — ${cat.format(cat.value(p))}</div>`
-    ).join('');
+let currentMapMarkers = TERRITORY_MARKERS_4P;
+let currentMapPolygons = TERRITORY_POLYGONS_4P;
+let currentMapImage = 'carte_underhive.jpg';
 
-    return `
-      <div class="triumph-card">
-        <div class="triumph-title">${cat.icon} ${cat.title}</div>
-        <div class="triumph-leader">${leader.gangName} (${cat.format(cat.value(leader))})</div>
-        <div class="triumph-others">${othersHTML}</div>
-      </div>
-    `;
-  }).join('');
+function selectMapForPlayerCount(count) {
+  let tiers = Object.keys(MAP_REGISTRY).map(Number).sort((a, b) => a - b);
+  let chosen = tiers[0];
+  tiers.forEach(t => { if (t <= count) chosen = t; });
+  let mapDef = MAP_REGISTRY[chosen];
+  currentMapMarkers = mapDef.markers;
+  currentMapPolygons = mapDef.polygons;
+  currentMapImage = mapDef.image;
 }
-
-
-function renderChallenges() {
-  let container = document.getElementById('challenges-container');
-  if (!container) return;
-  let phase = campaignData.phases[campaignData.currentPhaseIndex];
-
-  if (phase.type === 'pause') {
-    container.innerHTML = `<p style="color:#888; font-size:13px;">Pas de défis pendant la Phase de Pause.</p>`;
-    return;
-  }
-
-  let cycleData = campaignData.cycleChallenges ? campaignData.cycleChallenges[phase.id] : null;
-
-  if (!cycleData) {
-    container.innerHTML = `<p style="color:#888; font-size:13px;">Les défis de ce cycle n'ont pas encore été déclarés.</p>`;
-    return;
-  }
-
-  let total = cycleData.challenges.length;
-  let done = cycleData.challenges.filter(c => c.resolved).length;
-
-  let html = `<p style="font-size:14px;"><strong style="color:var(--accent-cyan);">${done}/${total}</strong> défis réalisés</p>`;
-
-  cycleData.challenges.forEach(ch => {
-    let attacker = campaignData.players.find(p => p.id === ch.attackerId);
-    let defender = campaignData.players.find(p => p.id === ch.defenderId);
-    let terr = campaignData.territories.find(t => t.id === ch.territoryId);
-    let winnerName = ch.result && ch.result.winnerId ? (campaignData.players.find(p => p.id === ch.result.winnerId)?.gangName) : null;
-    let statusText = !ch.resolved
-      ? 'En attente'
-      : (ch.resolutionType === 'unplayed' ? 'Non réalisé' : 'Match joué') + ' — ' + (winnerName ? winnerName + ' vainqueur' : 'Égalité');
-
-    html += `
-      <div style="background:#181818; padding:8px 10px; border-radius:4px; margin-bottom:6px; font-size:13px; border-left:4px solid ${ch.resolved ? '#2ecc71' : 'var(--accent-orange)'};">
-        <strong>${attacker ? attacker.gangName : '?'}</strong> vs <strong>${defender ? defender.gangName : '?'}</strong> — ${terr ? terr.name : '?'}
-        ${!ch.mandatory ? ' <small style="color:#888;">(supplémentaire)</small>' : ''}
-        <br><small style="color:${ch.resolved ? '#2ecc71' : '#e67e22'};">${statusText}</small>
-      </div>
-    `;
-  });
-
-  html += `<button class="btn" style="width:100%; margin-top:6px;" onclick="openChallengesHistoryModal()">📜 Historique des Défis Passés</button>`;
-
-  container.innerHTML = html;
-}
-
-function renderGangsStatus() {
-  let container = document.getElementById('gangs-status-container');
-  container.innerHTML = campaignData.players.map(p => {
-    let terrs = getPlayerTerritories(p.id);
-    let colorHex = getPlayerColorHex(p.color);
-    let totalWealth = p.credits + p.gangRating;
-
-    return `
-      <div class="gang-card" style="border-top-color: ${colorHex};">
-        <div class="gang-header">
-          <strong style="color:${colorHex}; font-size:16px;">${p.gangName}</strong>
-          <small>${p.name} (${p.gangType})</small>
-        </div>
-        <div class="gang-metrics">
-          <strong>Crédits en caisse :</strong> <span style="color:var(--accent-cyan);">${p.credits} cr</span><br>
-          <strong>Gang Rating :</strong> ${p.gangRating} cr | <strong>Richesse du Gang :</strong> <span style="color:#f39c12; font-weight:bold;">${totalWealth} cr</span><br>
-          <strong>Réputation :</strong> ${getPlayerReputation(p)} (Base: ${p.baseReputation})<br>
-          <strong>Parties Jouées :</strong> ${p.battlesPlayed} | <strong>Ennemis mis hors de combat :</strong> ${p.enemiesOOA}<br>
-          <strong>Territoires (${terrs.length}) :</strong> ${terrs.map(t => `<span class="territory-chip" title="${getTerritoryTypeDescription(t.type)}" onclick="showTerritoryBonusInfo(${t.id})">${t.name}</span>`).join(', ') || 'Aucun'}
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function showTerritoryBonusInfo(territoryId) {
-  let t = campaignData.territories.find(x => x.id === territoryId);
-  if (!t) return;
-  let owner = campaignData.players.find(p => p.id === t.ownerId);
-  let colorHex = owner ? getPlayerColorHex(owner.color) : '#8a8a8a';
-  let html = `
-    <p style="font-size:15px; color:${colorHex};"><strong>${t.name}</strong></p>
-    <p><strong>Bonus :</strong> ${getTerritoryTypeDescription(t.type)}</p>
-    <p style="color:#888; font-size:13px;"><strong>Propriétaire :</strong> ${owner ? owner.gangName : 'Neutre / Libre'}</p>
-    <small style="color:#666;">Secteur N° ${t.id}</small>
-  `;
-  openModal("🏷️ Détails du Territoire", html);
-}
-
-// ==========================================
-// 4. SAISIE DE MATCH
-// ==========================================
-
-
-function renderMatchesHistory() {
-  let container = document.getElementById('matches-history-list');
-  if (!campaignData.matchesHistory || campaignData.matchesHistory.length === 0) {
-    container.innerHTML = "<p style='color:#888;'>Aucune partie enregistrée.</p>";
-    return;
-  }
-  container.innerHTML = campaignData.matchesHistory.map((m) => `
-    <div style="background:#181818; padding:10px 12px; border-radius:4px; margin-bottom:8px; font-size:13px; border-left:4px solid var(--accent-purple);">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <strong>[${m.phaseName || 'Cycle N/A'}] ${m.p1Name} vs ${m.p2Name}</strong>
-      </div>
-      <div style="color:#aaa; font-size:12px; margin-top:4px;">
-        ${m.date} — Territoire : <em>${m.territoryName}</em> — <strong>Vainqueur : ${m.winnerName}</strong>
-      </div>
-    </div>
-  `).join('');
-}
-
-function openChallengesHistoryModal() {
-  let activePhases = campaignData.phases.filter(ph => ph.type !== 'pause' && campaignData.cycleChallenges[ph.id]);
-  let html = '';
-  if (activePhases.length === 0) {
-    html = `<p style="color:#888;">Aucun défi déclaré pour l'instant.</p>`;
-  }
-  activePhases.forEach(ph => {
-    let cycleData = campaignData.cycleChallenges[ph.id];
-    html += `<h4 style="color:var(--accent-purple); margin-top:12px;">${ph.name}</h4>`;
-    cycleData.challenges.forEach(ch => {
-      let attacker = campaignData.players.find(p => p.id === ch.attackerId);
-      let defender = campaignData.players.find(p => p.id === ch.defenderId);
-      let terr = campaignData.territories.find(t => t.id === ch.territoryId);
-      let winnerName = ch.result && ch.result.winnerId ? (campaignData.players.find(p => p.id === ch.result.winnerId)?.gangName) : null;
-      let statusText = !ch.resolved
-        ? 'Non résolu'
-        : (ch.resolutionType === 'unplayed' ? 'Non réalisé' : 'Match joué') + ' — ' + (winnerName ? winnerName + ' vainqueur' : 'Égalité');
-      html += `
-        <div style="background:#181818; padding:8px 10px; border-radius:4px; margin-bottom:6px; font-size:13px;">
-          <strong>${attacker ? attacker.gangName : '?'}</strong> vs <strong>${defender ? defender.gangName : '?'}</strong> — ${terr ? terr.name : '?'}
-          ${!ch.mandatory ? ' <small style="color:#888;">(supplémentaire)</small>' : ''}
-          <br><small style="color:${ch.resolved ? '#2ecc71' : '#e67e22'};">${statusText}</small>
-        </div>
-      `;
-    });
-  });
-  openModal("📜 Historique des Défis", html);
-}
-
-
-function openModal(title, bodyHTML) {
-  document.getElementById('modal-title').innerText = title;
-  document.getElementById('modal-body').innerHTML = bodyHTML;
-  document.getElementById('modal-overlay').classList.remove('hidden');
-}
-
-
-function closeModal() {
-  document.getElementById('modal-overlay').classList.add('hidden');
-}
-
-// ==========================================
-// 7. SAUVEGARDE, EXPORT & IMPORT JSON
-// ==========================================
 
 
 function initLeafletMap() {
@@ -333,6 +228,10 @@ function initLeafletMap() {
     campaignMap = null;
   }
   zoneLayers = {};
+
+  // La campagne peut avoir été créée avec un nombre de joueurs différent de la session
+  // précédente (rechargement d'une sauvegarde) : on s'assure d'utiliser la bonne carte.
+  selectMapForPlayerCount(campaignData.players.length);
 
   const bounds = [[0, 0], [1080, 1920]];
 
@@ -345,16 +244,25 @@ function initLeafletMap() {
     maxBoundsViscosity: 1.0
   });
 
-  L.imageOverlay('carte_underhive.jpg', bounds).addTo(campaignMap);
+  L.imageOverlay(currentMapImage, bounds).addTo(campaignMap);
+
+  // Territoires actuellement engagés dans un défi non résolu ce cycle (halo rouge permanent + icône)
+  let contestedTerritoryIds = new Set();
+  let curCycleData = campaignData.cycleChallenges[campaignData.phases[campaignData.currentPhaseIndex].id];
+  if (curCycleData) {
+    curCycleData.challenges.forEach(c => { if (!c.resolved) contestedTerritoryIds.add(c.territoryId); });
+  }
 
   // Génération des zones cliquables (halo pulsant au survol, coloré selon le propriétaire)
   if (campaignData && campaignData.territories) {
     campaignData.territories.forEach(ter => {
-      const shape = TERRITORY_POLYGONS[ter.id];
+      const shape = currentMapPolygons[ter.id];
       if (!shape) return;
 
       let ownerGang = campaignData.players.find(p => p.id === ter.ownerId);
       let colorHex = ownerGang ? getPlayerColorHex(ownerGang.color) : '#8a8a8a';
+      let isContested = contestedTerritoryIds.has(ter.id);
+
       let restStyle = {
         color: colorHex,
         weight: 2,
@@ -367,48 +275,95 @@ function initLeafletMap() {
         opacity: 1,
         fillOpacity: ownerGang ? 0.4 : 0.22
       };
+      // Territoire en jeu : halo rouge marqué, visible même sans survol
+      let contestedStyle = {
+        color: '#ff2b2b',
+        weight: 3,
+        opacity: 0.9,
+        fillColor: '#ff2b2b',
+        fillOpacity: 0.38
+      };
 
-      const layer = L.polygon(shape, restStyle).addTo(campaignMap);
+      const layer = L.polygon(shape, isContested ? contestedStyle : restStyle).addTo(campaignMap);
       zoneLayers[ter.id] = layer;
 
       layer.bindTooltip(ter.name, { direction: 'center', className: 'zone-tooltip', opacity: 0.95 });
 
+      function applyContestedLook(el) {
+        if (!el) return;
+        el.style.filter = 'drop-shadow(0 0 7px #ff2b2b) drop-shadow(0 0 18px #ff2b2b)';
+        el.classList.add('zone-halo-pulse');
+      }
+      function applyRestLook(el) {
+        if (!el) return;
+        el.style.filter = '';
+        el.classList.remove('zone-halo-pulse');
+      }
+
+      if (isContested) {
+        let el0 = layer.getElement();
+        applyContestedLook(el0);
+      }
+
       layer.on('mouseover', function () {
-        this.setStyle(hoverStyle);
+        // Au survol, un territoire en jeu révèle temporairement son apparence normale
+        // (couleur du propriétaire ou neutre) ; un territoire non contesté s'illumine comme d'habitude.
+        this.setStyle(isContested ? restStyle : hoverStyle);
         let el = this.getElement();
-        if (el) {
+        if (isContested) {
+          applyRestLook(el);
+        } else if (el) {
           el.style.filter = `drop-shadow(0 0 6px ${colorHex}) drop-shadow(0 0 16px ${colorHex})`;
           el.classList.add('zone-halo-pulse');
         }
       });
       layer.on('mouseout', function () {
-        this.setStyle(restStyle);
+        this.setStyle(isContested ? contestedStyle : restStyle);
         let el = this.getElement();
-        if (el) {
-          el.style.filter = '';
-          el.classList.remove('zone-halo-pulse');
+        if (isContested) {
+          applyContestedLook(el);
+        } else {
+          applyRestLook(el);
         }
       });
       layer.on('click', function () {
         showZoneInfoPanel(ter, ownerGang, colorHex);
       });
 
-      // Point coloré au centre de la zone (repère rapide, en plus du halo au survol)
-      const pos = TERRITORY_MARKERS[ter.id];
+      // Point/icône au centre de la zone : épées croisées si territoire en jeu, sinon pastille colorée
+      const pos = currentMapMarkers[ter.id];
       if (pos) {
-        const dotIcon = L.divIcon({
-          className: 'zone-dot-icon',
-          html: `<div style="
-            background-color: ${colorHex};
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 2px solid #ffffff;
-            box-shadow: 0 0 6px rgba(0,0,0,0.9);
-          "></div>`,
-          iconSize: [16, 16],
-          iconAnchor: [8, 8]
-        });
+        const dotIcon = isContested
+          ? L.divIcon({
+              className: 'zone-dot-icon',
+              html: `<div style="
+                background-color: #ff2b2b;
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                border: 2px solid #ffffff;
+                box-shadow: 0 0 10px rgba(255,0,0,0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+              ">⚔️</div>`,
+              iconSize: [26, 26],
+              iconAnchor: [13, 13]
+            })
+          : L.divIcon({
+              className: 'zone-dot-icon',
+              html: `<div style="
+                background-color: ${colorHex};
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                border: 2px solid #ffffff;
+                box-shadow: 0 0 6px rgba(0,0,0,0.9);
+              "></div>`,
+              iconSize: [16, 16],
+              iconAnchor: [8, 8]
+            });
         const dot = L.marker(pos, { icon: dotIcon, interactive: true }).addTo(campaignMap);
         dot.on('mouseover', () => layer.fire('mouseover'));
         dot.on('mouseout', () => layer.fire('mouseout'));
