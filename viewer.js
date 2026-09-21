@@ -222,6 +222,176 @@ function selectMapForPlayerCount(count) {
 }
 
 
+function renderTriumphs() {
+  let container = document.getElementById('triumphs-container');
+  if (campaignData.players.length === 0) return;
+
+  const categories = [
+    { icon: "👑", title: "Dominator", value: p => getPlayerTerritories(p.id).length, format: v => `${v} terr.` },
+    { icon: "💀", title: "Slaughterer", value: p => p.enemiesOOA, format: v => `${v} mis hors de combat` },
+    { icon: "💰", title: "Creditor", value: p => p.credits + p.gangRating, format: v => `${v} cr de richesse` },
+    { icon: "⚔️", title: "Warmonger", value: p => p.battlesPlayed, format: v => `${v} parties` },
+    { icon: "⚡", title: "Powerbroker", value: p => getPlayerReputation(p), format: v => `${v} rep` }
+  ];
+
+  container.innerHTML = categories.map(cat => {
+    let ranked = [...campaignData.players].sort((a, b) => cat.value(b) - cat.value(a));
+    let leader = ranked[0];
+    let othersHTML = ranked.slice(1).map(p =>
+      `<div class="triumph-other-row">${p.gangName} — ${cat.format(cat.value(p))}</div>`
+    ).join('');
+
+    return `
+      <div class="triumph-card">
+        <div class="triumph-title">${cat.icon} ${cat.title}</div>
+        <div class="triumph-leader">${leader.gangName} (${cat.format(cat.value(leader))})</div>
+        <div class="triumph-others">${othersHTML}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderGangsStatus() {
+  let container = document.getElementById('gangs-status-container');
+  container.innerHTML = campaignData.players.map(p => {
+    let terrs = getPlayerTerritories(p.id);
+    let colorHex = getPlayerColorHex(p.color);
+    let totalWealth = p.credits + p.gangRating;
+
+    return `
+      <div class="gang-card" style="border-top-color: ${colorHex};">
+        <div class="gang-header">
+          <strong style="color:${colorHex}; font-size:16px;">${p.gangName}</strong>
+          <small>${p.name} (${p.gangType})</small>
+        </div>
+        <div class="gang-metrics">
+          <strong>Crédits en caisse :</strong> <span style="color:var(--accent-cyan);">${p.credits} cr</span><br>
+          <strong>Gang Rating :</strong> ${p.gangRating} cr | <strong>Richesse du Gang :</strong> <span style="color:#f39c12; font-weight:bold;">${totalWealth} cr</span><br>
+          <strong>Réputation :</strong> ${getPlayerReputation(p)} (Base: ${p.baseReputation})<br>
+          <strong>Parties Jouées :</strong> ${p.battlesPlayed} | <strong>Ennemis mis hors de combat :</strong> ${p.enemiesOOA}<br>
+          <strong>Territoires (${terrs.length}) :</strong> ${terrs.map(t => `<span class="territory-chip" title="${getTerritoryTypeDescription(t.type)}" onclick="showTerritoryBonusInfo(${t.id})">${t.name}</span>`).join(', ') || 'Aucun'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function showTerritoryBonusInfo(territoryId) {
+  let t = campaignData.territories.find(x => x.id === territoryId);
+  if (!t) return;
+  let owner = campaignData.players.find(p => p.id === t.ownerId);
+  let colorHex = owner ? getPlayerColorHex(owner.color) : '#8a8a8a';
+  let html = `
+    <p style="font-size:15px; color:${colorHex};"><strong>${t.name}</strong></p>
+    <p><strong>Bonus :</strong> ${getTerritoryTypeDescription(t.type)}</p>
+    <p style="color:#888; font-size:13px;"><strong>Propriétaire :</strong> ${owner ? owner.gangName : 'Neutre / Libre'}</p>
+    <small style="color:#666;">Secteur N° ${t.id}</small>
+  `;
+  openModal("🏷️ Détails du Territoire", html);
+}
+
+function renderMatchesHistory() {
+  let container = document.getElementById('matches-history-list');
+  if (!campaignData.matchesHistory || campaignData.matchesHistory.length === 0) {
+    container.innerHTML = "<p style='color:#888;'>Aucune partie enregistrée.</p>";
+    return;
+  }
+  container.innerHTML = campaignData.matchesHistory.map((m) => `
+    <div style="background:#181818; padding:10px 12px; border-radius:4px; margin-bottom:8px; font-size:13px; border-left:4px solid var(--accent-purple);">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong>[${m.phaseName || 'Cycle N/A'}] ${m.p1Name} vs ${m.p2Name}</strong>
+      </div>
+      <div style="color:#aaa; font-size:12px; margin-top:4px;">
+        ${m.date} — Territoire : <em>${m.territoryName}</em> — <strong>Vainqueur : ${m.winnerName}</strong>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openChallengesHistoryModal() {
+  let activePhases = campaignData.phases.filter(ph => ph.type !== 'pause' && campaignData.cycleChallenges[ph.id]);
+  let html = '';
+  if (activePhases.length === 0) {
+    html = `<p style="color:#888;">Aucun défi déclaré pour l'instant.</p>`;
+  }
+  activePhases.forEach(ph => {
+    let cycleData = campaignData.cycleChallenges[ph.id];
+    html += `<h4 style="color:var(--accent-purple); margin-top:12px;">${ph.name}</h4>`;
+    cycleData.challenges.forEach(ch => {
+      let attacker = campaignData.players.find(p => p.id === ch.attackerId);
+      let defender = campaignData.players.find(p => p.id === ch.defenderId);
+      let terr = campaignData.territories.find(t => t.id === ch.territoryId);
+      let winnerName = ch.result && ch.result.winnerId ? (campaignData.players.find(p => p.id === ch.result.winnerId)?.gangName) : null;
+      let statusText = !ch.resolved
+        ? 'Non résolu'
+        : (ch.resolutionType === 'unplayed' ? 'Non réalisé' : 'Match joué') + ' — ' + (winnerName ? winnerName + ' vainqueur' : 'Égalité');
+      html += `
+        <div style="background:#181818; padding:8px 10px; border-radius:4px; margin-bottom:6px; font-size:13px;">
+          <strong>${attacker ? attacker.gangName : '?'}</strong> vs <strong>${defender ? defender.gangName : '?'}</strong> — ${terr ? terr.name : '?'}
+          ${!ch.mandatory ? ' <small style="color:#888;">(supplémentaire)</small>' : ''}
+          <br><small style="color:${ch.resolved ? '#2ecc71' : '#e67e22'};">${statusText}</small>
+        </div>
+      `;
+    });
+  });
+  openModal("📜 Historique des Défis", html);
+}
+
+function renderChallenges() {
+  let container = document.getElementById('challenges-container');
+  if (!container) return;
+  let phase = campaignData.phases[campaignData.currentPhaseIndex];
+
+  if (phase.type === 'pause') {
+    container.innerHTML = `<p style="color:#888; font-size:13px;">Pas de défis pendant la Phase de Pause.</p>`;
+    return;
+  }
+
+  let cycleData = campaignData.cycleChallenges ? campaignData.cycleChallenges[phase.id] : null;
+
+  if (!cycleData) {
+    container.innerHTML = `<p style="color:#888; font-size:13px;">Les défis de ce cycle n'ont pas encore été déclarés.</p>`;
+    return;
+  }
+
+  let total = cycleData.challenges.length;
+  let done = cycleData.challenges.filter(c => c.resolved).length;
+
+  let html = `<p style="font-size:14px;"><strong style="color:var(--accent-cyan);">${done}/${total}</strong> défis réalisés</p>`;
+
+  cycleData.challenges.forEach(ch => {
+    let attacker = campaignData.players.find(p => p.id === ch.attackerId);
+    let defender = campaignData.players.find(p => p.id === ch.defenderId);
+    let terr = campaignData.territories.find(t => t.id === ch.territoryId);
+    let winnerName = ch.result && ch.result.winnerId ? (campaignData.players.find(p => p.id === ch.result.winnerId)?.gangName) : null;
+    let statusText = !ch.resolved
+      ? 'En attente'
+      : (ch.resolutionType === 'unplayed' ? 'Non réalisé' : 'Match joué') + ' — ' + (winnerName ? winnerName + ' vainqueur' : 'Égalité');
+
+    html += `
+      <div style="background:#181818; padding:8px 10px; border-radius:4px; margin-bottom:6px; font-size:13px; border-left:4px solid ${ch.resolved ? '#2ecc71' : 'var(--accent-orange)'};">
+        <strong>${attacker ? attacker.gangName : '?'}</strong> vs <strong>${defender ? defender.gangName : '?'}</strong> — ${terr ? terr.name : '?'}
+        ${!ch.mandatory ? ' <small style="color:#888;">(supplémentaire)</small>' : ''}
+        <br><small style="color:${ch.resolved ? '#2ecc71' : '#e67e22'};">${statusText}</small>
+      </div>
+    `;
+  });
+
+  html += `<button class="btn" style="width:100%; margin-top:6px;" onclick="openChallengesHistoryModal()">📜 Historique des Défis Passés</button>`;
+
+  container.innerHTML = html;
+}
+
+function openModal(title, bodyHTML) {
+  document.getElementById('modal-title').innerText = title;
+  document.getElementById('modal-body').innerHTML = bodyHTML;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+}
+
 function initLeafletMap() {
   if (campaignMap !== null) {
     campaignMap.remove();
