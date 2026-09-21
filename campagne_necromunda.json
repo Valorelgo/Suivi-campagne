@@ -214,7 +214,38 @@
     }
   ],
   "matchesHistory": [],
-  "cycleChallenges": {},
+  "cycleChallenges": {
+    "1": {
+      "priorityOrder": [
+        "player_2",
+        "player_3",
+        "player_4",
+        "player_1"
+      ],
+      "challenges": [
+        {
+          "id": "1_mand_1790008832681_494",
+          "attackerId": "player_3",
+          "defenderId": "player_1",
+          "territoryId": 1,
+          "mandatory": true,
+          "resolved": false,
+          "resolutionType": null,
+          "result": null
+        },
+        {
+          "id": "1_mand_1790008832681_552",
+          "attackerId": "player_4",
+          "defenderId": "player_2",
+          "territoryId": 19,
+          "mandatory": true,
+          "resolved": false,
+          "resolutionType": null,
+          "result": null
+        }
+      ]
+    }
+  },
   "id": "camp_1789906531690",
   "name": "Hive Mortis - campagne de test"
 }
