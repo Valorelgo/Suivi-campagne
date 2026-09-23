@@ -57,10 +57,10 @@
       "gangName": "La confrérie de la dernière pénitence",
       "gangType": "Cawdor",
       "color": "Rouge",
-      "credits": 1000,
+      "credits": 1030,
       "gangRating": 0,
       "baseReputation": 1,
-      "battlesPlayed": 0,
+      "battlesPlayed": 1,
       "enemiesOOA": 0,
       "ooaInCurrentCycle": 0
     },
@@ -83,12 +83,12 @@
       "gangName": "Les épines pourpres",
       "gangType": "Escher",
       "color": "Jaune",
-      "credits": 10,
+      "credits": 70,
       "gangRating": 990,
-      "baseReputation": 1,
-      "battlesPlayed": 0,
-      "enemiesOOA": 0,
-      "ooaInCurrentCycle": 0
+      "baseReputation": 2,
+      "battlesPlayed": 1,
+      "enemiesOOA": 1,
+      "ooaInCurrentCycle": 1
     }
   ],
   "territories": [
@@ -204,7 +204,7 @@
       "id": 19,
       "name": "Gambling den",
       "type": "fixed_15_rep",
-      "ownerId": null
+      "ownerId": "player_4"
     },
     {
       "id": 20,
@@ -213,7 +213,24 @@
       "ownerId": null
     }
   ],
-  "matchesHistory": [],
+  "matchesHistory": [
+    {
+      "date": "23/09/2026",
+      "phaseName": "Phase d'Occupation - Cycle 1",
+      "p1Id": "player_4",
+      "p1Name": "Les épines pourpres",
+      "p1Creds": 60,
+      "p1Rep": 1,
+      "p1OOA": 1,
+      "p2Id": "player_2",
+      "p2Name": "La confrérie de la dernière pénitence",
+      "p2Creds": 30,
+      "p2Rep": 0,
+      "p2OOA": 0,
+      "territoryName": "Gambling den",
+      "winnerName": "Les épines pourpres"
+    }
+  ],
   "cycleChallenges": {
     "1": {
       "priorityOrder": [
@@ -239,9 +256,11 @@
           "defenderId": "player_2",
           "territoryId": 19,
           "mandatory": true,
-          "resolved": false,
-          "resolutionType": null,
-          "result": null
+          "resolved": true,
+          "resolutionType": "match",
+          "result": {
+            "winnerId": "player_4"
+          }
         },
         {
           "id": "1_mand_1790114478547_357",
